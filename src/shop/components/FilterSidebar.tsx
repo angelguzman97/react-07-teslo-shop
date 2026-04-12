@@ -1,9 +1,28 @@
+import { useSearchParams } from "react-router";
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
 import { Separator } from "../../components/ui/separator";
 
 export const FilterSidebar = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentSizes = searchParams.get('sizes')?.split(',') || []; // xs,l,xl. Si existe el arreglo se corta con una , para que aparezca en la url
+
+
+  const handSizeChange = (size: string) => {
+    // Se agrega una nueva talla. Si inclute una talla, la muestre y sino se agrega
+    const newSizes = currentSizes.includes(size)
+      ? currentSizes.filter((s) => s !== size)
+      : [...currentSizes, size];
+
+    // Si alguien agrega una talla, se regresa a la pagina 1
+    searchParams.set('page', '1');
+    // Se une la nueva talla y se separa por coma
+    searchParams.set('sizes', newSizes.join(','));
+
+    setSearchParams(searchParams);
+  }
 
   const sizes = [
     { id: "xs", label: "XS" },
@@ -27,9 +46,12 @@ export const FilterSidebar = () => {
           {sizes.map((size) => (
             <Button
               key={size.id}
-              variant="outline"
+              // Cambiar el color del boton
+              variant={currentSizes.includes(size.id) ? 'default' : 'outline'}
+              // variant="outline"
               size="sm"
               className="h-8"
+              onClick={() => handSizeChange(size.id)}
             >
               {size.label}
             </Button>
