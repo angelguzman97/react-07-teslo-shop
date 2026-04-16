@@ -91,7 +91,7 @@ export const CustomHeader = () => {
                                 size='sm'
                                 className='ml-2'
                             >
-                                Login
+                                Admin
                             </Button>
                         </Link>
                     </div>
