@@ -34,8 +34,15 @@ export const AdminSidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
     { icon: HelpCircle, label: 'Ayuda' },
   ];
 
+  console.log({ pathname });
+
+
   const isActiveRoute = (to: string) => {
     // TODO: Ajustarlo cuando se este en la pantalla de producto
+    if (pathname.includes('/admin/products/') && to === '/admin/products') {
+      return true;
+    }
+
     return pathname === to;
   }
 
