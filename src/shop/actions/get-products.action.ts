@@ -6,18 +6,22 @@ interface Options {
     offset?: number | string;
     sizes?: string;
     gender?: string;
+    minPrice?: number | string;
+    maxPrice?: number | string;
 }
 
 // Regresamos de manera estricta una promesa
 export const getProductsAction = async (options: Options): Promise<ProductsResponse> => {
-    const { limit, offset, sizes, gender } = options
+    const { limit, offset, sizes, gender, minPrice, maxPrice } = options
     const { data } = await tesloApi.get<ProductsResponse>('/products', {
         // Mandar como segundos parametros
         params: {
             limit,
             offset,
             sizes,
-            gender
+            gender,
+            minPrice,
+            maxPrice,
         }
     });
 
