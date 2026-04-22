@@ -8,11 +8,12 @@ interface Options {
     gender?: string;
     minPrice?: number | string;
     maxPrice?: number | string;
+    query?: string;
 }
 
 // Regresamos de manera estricta una promesa
 export const getProductsAction = async (options: Options): Promise<ProductsResponse> => {
-    const { limit, offset, sizes, gender, minPrice, maxPrice } = options
+    const { limit, offset, sizes, gender, minPrice, maxPrice, query } = options
     const { data } = await tesloApi.get<ProductsResponse>('/products', {
         // Mandar como segundos parametros
         params: {
@@ -22,7 +23,8 @@ export const getProductsAction = async (options: Options): Promise<ProductsRespo
             gender,
             minPrice,
             maxPrice,
-        }
+            q: query, // Como lo pide en el backend q
+        },
     });
 
     // Crear url de la imagen. Traer un producto implicitamente
