@@ -4,13 +4,15 @@ import { Card, CardContent } from "../../../components/ui/card";
 import { Label } from "../../../components/ui/label";
 import { Button } from "../../../components/ui/button";
 import { CustomLogo } from "../../../components/custom/CustomLogo";
-import { loginAction } from "../../actions/login.action";
 import { Input } from "../../../components/ui/input";
 import { toast } from "sonner";
+import { useAuthStore } from "../../store/auth.store";
 
 export const LoginPage = () => {
 
   const navigate = useNavigate();
+  const { login } = useAuthStore();
+
   const [isPosting, setIsPosting] = useState(false);
 
   // Crear manejador para formulario
@@ -22,17 +24,14 @@ export const LoginPage = () => {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    try {
-      const data = await loginAction(email, password);
-      // Si sale bien se guarda el token en el localStorage
-      localStorage.setItem('token', data.token);
 
-      console.log('Re-redireccionando al home');
+    const isValid = await login(email, password);
+    if (isValid) {
       navigate('/');
-
-    } catch (error) {
-      toast.error('Correo o/y contraseña no válidos');
+      return;
     }
+
+    toast.error('Correo o/y contraseña no válidos');
 
     setIsPosting(false);
 

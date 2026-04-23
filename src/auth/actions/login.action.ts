@@ -9,9 +9,7 @@ export const loginAction = async (email: string, password: string): Promise<Auth
             email,
             password
         });
-
-        console.log(data);
-
+        
         return data;
 
     } catch (error) {
