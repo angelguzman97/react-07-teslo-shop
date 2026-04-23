@@ -5,10 +5,12 @@ import { useRef } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import { cn } from "../../lib/utils";
 import { CustomLogo } from "../../components/custom/CustomLogo";
+import { useAuthStore } from "../../auth/store/auth.store";
 
 export const CustomHeader = () => {
     const [searchParams, setSearchParams] = useSearchParams(); // query parameters opcionales
-    const { gender } = useParams(); // segmentos de rutas que vienen obligatorios    
+    const { user, logout } = useAuthStore(); // Verificar que se esta logeado. Y cerrar sesión
+    const { gender } = useParams(); // segmentos de rutas que vienen obligatorios
 
     const inputRef = useRef<HTMLInputElement>(null);
     const query = searchParams.get('query') || '';
@@ -78,14 +80,26 @@ export const CustomHeader = () => {
                         <Button variant="ghost" size="icon" className="md:hidden">
                             <Search className="h-5 w-5" />
                         </Button>
-                        <Link to='/auth/login'>
-                            <Button variant="default"
+                        {!user ? (
+
+                            <Link to='/auth/login'>
+                                <Button variant="default"
+                                    size='sm'
+                                    className='ml-2'
+                                >
+                                    Login
+                                </Button>
+                            </Link>
+                        ) : (
+
+                            <Button variant="outline"
                                 size='sm'
                                 className='ml-2'
+                                onClick={logout}
                             >
-                                Login
+                                Cerrar sesión
                             </Button>
-                        </Link>
+                        )}
                         <Link to='/admin'>
                             <Button variant="destructive"
                                 size='sm'
