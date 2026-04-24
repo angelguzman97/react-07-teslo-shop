@@ -9,9 +9,12 @@ import { DashboardPage } from "./admin/pages/dasboard/DashboardPage";
 import { AdminProductsPage } from "./admin/pages/products/AdminProductsPage";
 import { lazy } from "react";
 import { AdminProductPage } from "./admin/pages/product/AdminProductPage";
+import { AdminRoute, NotAuthenticatedRoute } from "./components/routes/ProtectedRoutes";
 
 const AuthLayout = lazy(() => import('./auth/layouts/AuthLayout'));
 const AdminLayout = lazy(() => import('./admin/layouts/AdminLayout'));
+
+// El AuthLayout y el AdminLayout se envuelve para proteger rutas
 
 export const appRouter = createBrowserRouter([
     // Public Routes
@@ -37,7 +40,11 @@ export const appRouter = createBrowserRouter([
     // Auth Routes
     {
         path: '/auth',
-        element: <AuthLayout />,
+        element: (
+            <NotAuthenticatedRoute>
+                <AuthLayout />
+            </NotAuthenticatedRoute>
+        ),
         children: [
             // Si alguien entra accidentalmente al auth.
             {
@@ -58,7 +65,11 @@ export const appRouter = createBrowserRouter([
     // Admin routes
     {
         path: '/admin',
-        element: <AdminLayout />,
+        element: (
+            <AdminRoute>
+                <AdminLayout />
+            </AdminRoute>
+        ),
         children: [
             {
                 index: true,
