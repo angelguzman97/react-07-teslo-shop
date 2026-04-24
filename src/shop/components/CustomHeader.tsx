@@ -9,7 +9,7 @@ import { useAuthStore } from "../../auth/store/auth.store";
 
 export const CustomHeader = () => {
     const [searchParams, setSearchParams] = useSearchParams(); // query parameters opcionales
-    const { user, logout } = useAuthStore(); // Verificar que se esta logeado. Y cerrar sesión
+    const { authStatus, isAdmin, logout } = useAuthStore(); // Verificar que se esta logeado. Y cerrar sesión
     const { gender } = useParams(); // segmentos de rutas que vienen obligatorios
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -80,7 +80,7 @@ export const CustomHeader = () => {
                         <Button variant="ghost" size="icon" className="md:hidden">
                             <Search className="h-5 w-5" />
                         </Button>
-                        {!user ? (
+                        {authStatus === 'not-authenticated' ? (
 
                             <Link to='/auth/login'>
                                 <Button variant="default"
@@ -91,7 +91,6 @@ export const CustomHeader = () => {
                                 </Button>
                             </Link>
                         ) : (
-
                             <Button variant="outline"
                                 size='sm'
                                 className='ml-2'
@@ -100,14 +99,19 @@ export const CustomHeader = () => {
                                 Cerrar sesión
                             </Button>
                         )}
-                        <Link to='/admin'>
-                            <Button variant="destructive"
-                                size='sm'
-                                className='ml-2'
-                            >
-                                Admin
-                            </Button>
-                        </Link>
+                        {
+                            isAdmin() && (
+
+                                <Link to='/admin'>
+                                    <Button variant="destructive"
+                                        size='sm'
+                                        className='ml-2'
+                                    >
+                                        Admin
+                                    </Button>
+                                </Link>
+                            )
+                        }
                     </div>
                 </div>
             </div>
