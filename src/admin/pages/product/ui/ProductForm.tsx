@@ -1,10 +1,10 @@
+import { useState } from 'react';
+import { Link } from 'react-router';
+import { useForm } from 'react-hook-form';
 import { AdminTitle } from '../../../components/AdminTitle';
 import { Button } from '../../../../components/ui/button';
-import { Link } from 'react-router';
-import { X, SaveAll, Tag, Plus, Upload } from 'lucide-react';
 import type { Product } from '../../../../interfaces/product.interface';
-import { useState } from 'react';
-import { Input } from '../../../../components/ui/input';
+import { X, SaveAll, Tag, Plus, Upload } from 'lucide-react';
 
 interface Props {
     title: string;
@@ -17,15 +17,18 @@ const availableSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
 export const ProductForm = ({ title, subtitle, product }: Props) => {
 
     const [dragActive, setDragActive] = useState(false);
+    const { register } = useForm({
+        defaultValues: product, // Esto es para que el formulario respetoe los valores por defecto que tienen los productos.
+    });
 
     const addTag = () => {
-        // if (newTag.trim() && !product.tags.includes(newTag.trim())) {
-        // setProduct((prev) => ({
-        //     ...prev,
-        //     tags: [...prev.tags, newTag.trim()],
-        // }));
-        //     setNewTag('');
-        // }
+        if (newTag.trim() && !product.tags.includes(newTag.trim())) {
+            // setProduct((prev) => ({
+            //     ...prev,
+            //     tags: [...prev.tags, newTag.trim()],
+            // }));
+            //     setNewTag('');
+        }
     };
 
     const removeTag = (tagToRemove: string) => {
@@ -113,6 +116,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                         type="text"
                                         // value={product.title}
                                         // onChange={(e) => handleInputChange('title', e.target.value)}
+                                        {...register('title')}
                                         className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         placeholder="Título del producto"
                                     />
@@ -129,6 +133,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                             // onChange={(e) =>
                                             //     handleInputChange('price', parseFloat(e.target.value))
                                             // }
+                                            {...register('price')}
                                             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="Precio del producto"
                                         />
@@ -144,6 +149,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                             // onChange={(e) =>
                                             //     handleInputChange('stock', parseInt(e.target.value))
                                             // }
+                                            {...register('stock')}
                                             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="Stock del producto"
                                         />
@@ -158,6 +164,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                         type="text"
                                         // value={product.slug}
                                         // onChange={(e) => handleInputChange('slug', e.target.value)}
+                                        {...register('slug')}
                                         className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         placeholder="Slug del producto"
                                     />
@@ -172,6 +179,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                         // onChange={(e) =>
                                         //     handleInputChange('gender', e.target.value)
                                         // }
+                                        {...register('gender')}
                                         className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                     >
                                         <option value="men">Hombre</option>
@@ -190,6 +198,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                         // onChange={(e) =>
                                         //     handleInputChange('description', e.target.value)
                                         // }
+                                        {...register('description')}
                                         rows={5}
                                         className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
                                         placeholder="Descripción del producto"
@@ -297,21 +306,21 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
 
                             {/* Drag & Drop Zone */}
                             <div
-                            className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${dragActive
-                                ? 'border-blue-400 bg-blue-50'
-                                : 'border-slate-300 hover:border-slate-400'
-                                }`}
-                            onDragEnter={handleDrag}
-                            onDragLeave={handleDrag}
-                            onDragOver={handleDrag}
-                            onDrop={handleDrop}
+                                className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${dragActive
+                                    ? 'border-blue-400 bg-blue-50'
+                                    : 'border-slate-300 hover:border-slate-400'
+                                    }`}
+                                onDragEnter={handleDrag}
+                                onDragLeave={handleDrag}
+                                onDragOver={handleDrag}
+                                onDrop={handleDrop}
                             >
-                                <Input
+                                <input
                                     type="file"
                                     multiple
                                     accept="image/*"
                                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                onChange={handleFileChange}
+                                    onChange={handleFileChange}
                                 />
                                 <div className="space-y-4">
                                     <Upload className="mx-auto h-12 w-12 text-slate-400" />
