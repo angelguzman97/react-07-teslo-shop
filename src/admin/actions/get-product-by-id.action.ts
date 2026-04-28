@@ -6,6 +6,7 @@ export const getProductByIdAction = async (id: string): Promise<Product> => {
 
     if (id === 'new') {
         return {
+            id: 'new',
             title: '',
             price: 0,
             description: '',
@@ -23,7 +24,7 @@ export const getProductByIdAction = async (id: string): Promise<Product> => {
 
     const images = data.images.map((image) => {
         if (image.includes('http')) return image;
-        return `${import.meta.env.VITE_API_URL}/files/products/${image}`;
+        return `${import.meta.env.VITE_API_URL}/files/product/${image}`;
     });
 
     return {
