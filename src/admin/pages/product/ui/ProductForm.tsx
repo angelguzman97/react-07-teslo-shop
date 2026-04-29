@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { AdminTitle } from '../../../components/AdminTitle';
 import { Button } from '../../../../components/ui/button';
-import type { Product } from '../../../../interfaces/product.interface';
+import type { Product, Size } from '../../../../interfaces/product.interface';
 import { X, SaveAll, Tag, Plus, Upload } from 'lucide-react';
 import { cn } from '../../../../lib/utils';
 
@@ -13,17 +13,22 @@ interface Props {
     product: Product;
 }
 
-const availableSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+const availableSizes: Size[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 export const ProductForm = ({ title, subtitle, product }: Props) => {
 
     const [dragActive, setDragActive] = useState(false);
     const { register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        getValues, // Sirve para saber el valor del formulario
+        setValue, // Sirve para establecer un valor al formulario
+        watch
     } = useForm({
         defaultValues: product, // Esto es para que el formulario respetoe los valores por defecto que tienen los productos.
     });
+
+    const selectedSizes = watch('sizes'); // Para que ha re-render al seleccionar una talla    
 
     const addTag = () => {
         // if (newTag.trim() && !product.tags.includes(newTag.trim())) {
@@ -42,13 +47,10 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
         // }));
     };
 
-    const addSize = (size: string) => {
-        // if (!product.sizes.includes(size)) {
-        //     setProduct((prev) => ({
-        //         ...prev,
-        //         sizes: [...prev.sizes, size],
-        //     }));
-        // }
+    const addSize = (size: Size) => {
+        const sizeSet = new Set(getValues('sizes')); // Los set en JS  es muy similar a un arrays, es una estructura que permite mantener solo valores únicos
+        sizeSet.add(size); // Es lo mismo que el if(), si existe lo va a ignorar sino, lo va a incluir
+        setValue('sizes', Array.from(sizeSet)); // Crea el arreglo basado en el sizeSet
     };
 
     const removeSize = (sizeToRemove: string) => {
@@ -100,7 +102,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                         </Link>
                     </Button>
 
-                    <Button type='submit'>
+                    <Button type="submit">
                         <SaveAll className="w-4 h-4" />
                         Guardar cambios
                     </Button>
@@ -258,15 +260,18 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
 
                             <div className="space-y-4">
                                 <div className="flex flex-wrap gap-2">
-                                    {product.sizes.map((size) => (
+                                    {availableSizes.map((size) => (
                                         <span
                                             key={size}
-                                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200"
+                                            className={cn('inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200', {
+                                                'hidden': !selectedSizes.includes(size), // Para que aparezcan en orden logico
+                                            })}
                                         >
                                             {size}
                                             <button
                                                 // onClick={() => removeSize(size)}
                                                 className="ml-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+
                                             >
                                                 <X className="h-3 w-3" />
                                             </button>
@@ -280,13 +285,14 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                     </span>
                                     {availableSizes.map((size) => (
                                         <button
+                                            type='button'
                                             key={size}
-                                        // onClick={() => addSize(size)}
-                                        // disabled={product.sizes.includes(size)}
-                                        // className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${product.sizes.includes(size)
-                                        //     ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                                        //     : 'bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer'
-                                        //     }`}
+                                            onClick={() => addSize(size)}
+                                            disabled={getValues('sizes').includes(size)}
+                                            className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${selectedSizes.includes(size)
+                                                ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                                : 'bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer'
+                                                }`}
                                         >
                                             {size}
                                         </button>
