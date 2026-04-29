@@ -23,7 +23,7 @@ export const AdminProductPage = () => {
   const { id } = useParams();
 
   // Para obtener el producto por id
-  const { data: product, isLoading, isError } = useProduct(id || '');
+  const { data: product, isLoading, isError, handleSubmitForm } = useProduct(id || '');
 
   // console.log({ product, isLoading, isError });
 
@@ -33,8 +33,6 @@ export const AdminProductPage = () => {
     id === 'new'
       ? 'Aquí puedes crear un nuevo producto.'
       : 'Aquí puedes editar el producto.';
-
-
 
   // Redirección
   if (isError) {
@@ -50,6 +48,11 @@ export const AdminProductPage = () => {
     return <Navigate to='/admin/products' />
   }
 
-  return <ProductForm title={title} subtitle={subtitle} product={product} />
+  return <ProductForm
+    title={title}
+    subtitle={subtitle}
+    product={product}
+    onSubmit={handleSubmitForm}
+  />
 
 };

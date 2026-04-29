@@ -11,11 +11,14 @@ interface Props {
     title: string;
     subtitle: string;
     product: Product;
+
+    // Methods
+    onSubmit: (productLike: Partial<Product>) => Promise<void>;
 }
 
 const availableSizes: Size[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-export const ProductForm = ({ title, subtitle, product }: Props) => {
+export const ProductForm = ({ title, subtitle, product, onSubmit }: Props) => {
 
     const [dragActive, setDragActive] = useState(false);
     const { register,
@@ -81,13 +84,6 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
         const files = e.target.files;
         console.log(files);
     };
-
-    // TODO: Remover en un futuro
-    const onSubmit = (productLike: Product) => {
-        console.log('onSubmit', productLike);
-
-    }
-
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -340,7 +336,7 @@ export const ProductForm = ({ title, subtitle, product }: Props) => {
                                         className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                     />
                                     <Button
-                                        onClick={(e) => { addTag() }}
+                                        onClick={addTag}
                                         className="px-4 py-2rounded-lg ">
                                         <Plus className="h-4 w-4" />
                                     </Button>
