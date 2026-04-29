@@ -22,7 +22,7 @@ interface SidebarProps {
 
 export const AdminSidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
   const { pathname } = useLocation();
-  console.log({ pathname });
+  // console.log({ pathname });
   const {user} = useAuthStore();
 
   const menuItems = [
@@ -35,9 +35,6 @@ export const AdminSidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
     { icon: Settings, label: 'Ajustes' },
     { icon: HelpCircle, label: 'Ayuda' },
   ];
-
-  console.log({ pathname });
-
 
   const isActiveRoute = (to: string) => {
     // TODO: Ajustarlo cuando se este en la pantalla de producto

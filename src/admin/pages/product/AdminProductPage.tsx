@@ -2,7 +2,6 @@
 
 
 import { Navigate, useParams } from 'react-router';
-import { useState } from 'react';
 import { useProduct } from '../../hooks/useProduct';
 import { CustomFullScreenLoading } from '../../../components/custom/CustomFullScreenLoading';
 import { ProductForm } from './ui/ProductForm';
@@ -26,7 +25,7 @@ export const AdminProductPage = () => {
   // Para obtener el producto por id
   const { data: product, isLoading, isError } = useProduct(id || '');
 
-  console.log({ product, isLoading, isError });
+  // console.log({ product, isLoading, isError });
 
 
   const title = id === 'new' ? 'Nuevo producto' : 'Editar producto';
