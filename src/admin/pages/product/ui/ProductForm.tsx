@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { AdminTitle } from '../../../components/AdminTitle';
@@ -37,6 +37,11 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
     });
     const inputRef = useRef<HTMLInputElement>(null);
     const [files, setFiles] = useState<File[]>([]);
+
+    // effect para quitar las images por cargar
+    useEffect(() => {
+        setFiles([]);
+    }, [product])
 
     const selectedSizes = watch('sizes'); // Para que ha re-render al seleccionar una talla
     const selectedTags = watch('tags');
