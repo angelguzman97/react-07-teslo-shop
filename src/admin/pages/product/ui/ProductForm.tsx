@@ -14,10 +14,14 @@ interface Props {
     isPending: boolean;
 
     // Methods
-    onSubmit: (productLike: Partial<Product>) => Promise<void>;
+    onSubmit: (productLike: Partial<Product> & { files?: File[] }) => Promise<void>; // Puede ser de tipo products o archivos
 }
 
 const availableSizes: Size[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+interface FormInputs extends Product {
+    files?: File[];
+}
 
 export const ProductForm = ({ title, subtitle, product, isPending = false, onSubmit }: Props) => {
 
@@ -28,7 +32,7 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
         getValues, // Sirve para saber el valor del formulario
         setValue, // Sirve para establecer un valor al formulario
         watch
-    } = useForm({
+    } = useForm<FormInputs>({
         defaultValues: product, // Esto es para que el formulario respetoe los valores por defecto que tienen los productos.
     });
     const inputRef = useRef<HTMLInputElement>(null);
@@ -82,6 +86,10 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
         if (!files) return;
         // Para mantener los archivos anteriores y archivos nuevos
         setFiles((prev) => [...prev, ...Array.from(files)]);
+
+        // Para ya no ocupar el state, se ocupa el setValue del TanStack
+        const currentFile = getValues('files') || []; // Para que no aplaste a los archivos anteriores
+        setValue('files', [...currentFile, ...Array.from(files)]);
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +98,8 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
         // Para mantener los archivos anteriores y archivos nuevos
         setFiles((prev) => [...prev, ...Array.from(files)]);
 
-
+        const currentFile = getValues('files') || [];
+        setValue('files', [...currentFile, ...Array.from(files)]);
     };
 
     return (

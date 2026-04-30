@@ -15,10 +15,9 @@ export const AdminProductPage = () => {
   // Para obtener el producto por id
   const { data: product, isLoading, isError, productMutation } = useProduct(id || '');
 
-  // console.log({ product, isLoading, isError });
-
   // Asegurar la compatibilidad de las peticiones
-  const handleSubmit = async (productLike: Partial<Product>) => {
+  const handleSubmit = async (productLike: Partial<Product> & { files?: File[] }) => {
+
     await productMutation.mutateAsync(productLike, {
       onSuccess: (data) => {
         toast.success('Producto actualizado correctamente', {

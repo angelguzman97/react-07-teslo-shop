@@ -2,17 +2,20 @@ import { tesloApi } from "../../api/tesloApi";
 import type { Product } from "../../interfaces/product.interface";
 import { sleep } from "../../lib/sleep";
 
-export const createUpdateProductAction = async (productLike: Partial<Product>): Promise<Product> => {
+export const createUpdateProductAction = async (productLike: Partial<Product> & { files?: File[] }): Promise<Product> => {
 
     await sleep(1500);
 
-    const { id, user, images = [], ...rest } = productLike;
+    const { id, user, images = [], files = [], ...rest } = productLike;
 
     const isCreating = id === 'new';
 
     // Transformar a number
     rest.stock = Number(rest.stock || 0);
     rest.price = Number(rest.price || 0);
+
+    console.log({ files });
+
 
     // Se puede usar .patch o .post o solo mandar el objeto
     const { data } = await tesloApi<Product>({
