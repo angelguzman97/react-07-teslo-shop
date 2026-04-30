@@ -31,11 +31,12 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
     } = useForm({
         defaultValues: product, // Esto es para que el formulario respetoe los valores por defecto que tienen los productos.
     });
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [files, setFiles] = useState<File[]>([]);
 
     const selectedSizes = watch('sizes'); // Para que ha re-render al seleccionar una talla
     const selectedTags = watch('tags');
     const currentStock = watch('stock');
-    const inputRef = useRef<HTMLInputElement>(null);
 
     const addTag = () => {
         const tagSet = new Set(getValues('tags'));
@@ -78,12 +79,18 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
         e.stopPropagation();
         setDragActive(false);
         const files = e.dataTransfer.files;
-        console.log(files);
+        if (!files) return;
+        // Para mantener los archivos anteriores y archivos nuevos
+        setFiles((prev) => [...prev, ...Array.from(files)]);
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
-        console.log(files);
+        if (!files) return;
+        // Para mantener los archivos anteriores y archivos nuevos
+        setFiles((prev) => [...prev, ...Array.from(files)]);
+
+
     };
 
     return (
@@ -412,6 +419,30 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+
+                            {/*Imagenes por cargar*/}
+                            <div className={cn("mt-6 space-y-3", {
+                                'hidden': files.length === 0
+                            })}>
+                                <h3 className="text-sm font-medium text-slate-700">
+                                    Imágenes por cargar
+                                </h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {
+                                        files.map((file, index) => (
+                                            <img
+                                                src={URL.createObjectURL(file)}
+                                                key={index}
+                                                alt="Product"
+                                                className="w-full h-full object-cover rounded-lg"
+                                            />
+                                        ))
+                                    }
+                                </div>
+                                {/* {
+                                    files.length === 0 && <p className='text-red-500'>No hay archivos cargados</p>
+                                } */}
                             </div>
                         </div>
 
