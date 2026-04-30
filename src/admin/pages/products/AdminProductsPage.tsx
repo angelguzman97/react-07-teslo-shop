@@ -47,7 +47,7 @@ export const AdminProductsPage = () => {
         <TableBody>
           {
             data!.products.map((product) => (
-              <TableRow>
+              <TableRow key={product.id}>
                 <TableCell><img src={`${product.images[0]}`} alt={`${product.title}`} className="w-20 h-20 object-cover rounder-md" /></TableCell>
                 <TableCell className="font-medium">
                   <Link to={`/admin/products/${product.id}`}

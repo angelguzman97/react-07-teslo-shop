@@ -1,9 +1,13 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getProductByIdAction } from '../actions/get-product-by-id.action'
 import { createUpdateProductAction } from '../actions/create-update-product.action';
 import type { Product } from '../../interfaces/product.interface';
 
 export const useProduct = (id: string) => {
+    // Para no realizar mas de una peticion http
+    const queryClient = useQueryClient();
+
+
     const query = useQuery({
         queryKey: ['product', { id }],
         queryFn: () => getProductByIdAction(id),
@@ -18,9 +22,13 @@ export const useProduct = (id: string) => {
     const productMutation = useMutation({
         mutationFn: createUpdateProductAction,
         onSuccess: (product: Product) => {
-            console.log('Producto registrado correctamente', { product });
-            // TODO: 
-            // Se puede invildar cache, actualizar queryData
+            // para que refleje la actualizacion. Invalidar cache
+            queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['product', { id: product.id }] });
+
+            // Actualizar queryData. data - products, llave - id y el valor - product
+            queryClient.setQueryData(['products', { id: product.id }], product);
+
         }
     }); // Es como useQuery, viene isLoading, isError, etc.
 
