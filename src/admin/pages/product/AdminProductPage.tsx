@@ -61,6 +61,7 @@ export const AdminProductPage = () => {
     subtitle={subtitle}
     product={product}
     onSubmit={handleSubmit}
+    isPending={productMutation.isPending}
   />
 
 };
