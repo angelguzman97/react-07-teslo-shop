@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, createHashRouter, Navigate } from "react-router";
 import { ShopLayout } from "./shop/layouts/ShopLayout";
 import { HomePage } from "./shop/pages/home/HomePage";
 import { ProductPage } from "./shop/pages/product/ProductPage";
@@ -15,8 +15,8 @@ const AuthLayout = lazy(() => import('./auth/layouts/AuthLayout'));
 const AdminLayout = lazy(() => import('./admin/layouts/AdminLayout'));
 
 // El AuthLayout y el AdminLayout se envuelve para proteger rutas
-
-export const appRouter = createBrowserRouter([
+export const appRouter = createHashRouter([ // Se ocua el createHashRouter para hashear las rutas y simular diferentes pantallas
+    // export const appRouter = createBrowserRouter([
     // Public Routes
     {
         path: '/',
