@@ -119,7 +119,7 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
                         </Link>
                     </Button>
 
-                    <Button type="submit" disabled={isPending}>
+                    <Button disabled={isPending}>
                         <SaveAll className="w-4 h-4" />
                         Guardar cambios
                     </Button>
@@ -286,6 +286,7 @@ export const ProductForm = ({ title, subtitle, product, isPending = false, onSub
                                         >
                                             {size}
                                             <button
+                                                type='button'
                                                 onClick={() => removeSize(size)}
                                                 className="cursor-pointer ml-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
 
